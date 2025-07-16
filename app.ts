@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import login from "./routes/LoginRoutes";
 import register from "./routes/RegistroRoutes";
+import programacionPinturaRoutes from "./routes/ProgramacionPinturaRoutes";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 // 🔐 Rutas de autenticación
 app.use("/login", login);
 app.use("/registro", register);
+app.use('/programacion', programacionPinturaRoutes);
 
 // ❌ Manejo global de errores
 app.use((err: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
