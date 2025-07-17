@@ -51,4 +51,6 @@ const registro = async (req: Request, res: Response) => {
     }
 }
 
-export default registro;
+export default {
+    registro
+};

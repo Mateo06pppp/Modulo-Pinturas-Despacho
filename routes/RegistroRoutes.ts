@@ -3,7 +3,7 @@ import registerController from "../controllers/RegisterController";
 const router = express.Router();
 
 
-router.post('/register', registerController);
+router.post('/register', registerController.registro);
 
 
 export default router;
