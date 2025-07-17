@@ -5,8 +5,8 @@ class ProgramacionRepository {
   static async crearProgramacion(data: ProgramacionDto) {
     const sql = `
       INSERT INTO PROGRAMACION_PINTURA 
-      (id_producto, id_operario, fecha_programada, hora_inicio, hora_fin, fecha_registro_avance, avance_porcentaje, estado_programacion)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+      (id_producto, id_operario, fecha_programada, hora_inicio, hora_fin, fecha_registro_avance, avance_porcentaje, estado_programacion, cantidad_programada)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
     const params = [
       data.id_producto,
@@ -16,7 +16,8 @@ class ProgramacionRepository {
       data.hora_fin,
       data.fecha_registro_avance,
       data.avance_porcentaje,
-      data.estado_programacion
+      data.estado_programacion,
+      data.cantidad_programada
     ];
 
     const [result] = await promisePool.execute(sql, params);
