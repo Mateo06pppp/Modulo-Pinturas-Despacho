@@ -7,7 +7,8 @@ class ProgramacionDto {
     public hora_fin: string,
     public fecha_registro_avance: string,
     public avance_porcentaje: number,
-    public estado_programacion: string
+    public estado_programacion: string,
+    public cantidad_programada: number
   ) {}
 }
 

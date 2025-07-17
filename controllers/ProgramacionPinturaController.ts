@@ -12,7 +12,8 @@ const crearProgramacion = async (req: Request, res: Response) => {
       hora_fin,
       fecha_registro_avance,
       avance_porcentaje,
-      estado_programacion
+      estado_programacion,
+      cantidad_programada
     } = req.body;
 
     const nueva = new ProgramacionDto(
@@ -23,7 +24,8 @@ const crearProgramacion = async (req: Request, res: Response) => {
       hora_fin,
       fecha_registro_avance,
       avance_porcentaje,
-      estado_programacion
+      estado_programacion,
+      cantidad_programada
     );
 
     const resultado = await ProgramacionService.registrar(nueva);
