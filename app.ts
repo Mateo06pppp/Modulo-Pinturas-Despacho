@@ -10,6 +10,7 @@ import despachoRoutes from './routes/DespachoRoutes';
 import bodegaRoutes from './routes/BodegaAlistamientoRoutes';
 import clienteRoutes from './routes/ClienteRoutes';
 import rutaRoutes from './routes/RutaRoutes';
+import operarioRoutes from './routes/OperarioRoutes'
 
 
 dotenv.config();
@@ -47,6 +48,7 @@ app.use('/despachos', despachoRoutes);
 app.use('/bodega-alistamiento', bodegaRoutes);
 app.use('/clientes', clienteRoutes);
 app.use('/rutas', rutaRoutes);
+app.use('/operario', operarioRoutes)
 
 // ❌ Manejo global de errores
 app.use((err: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
