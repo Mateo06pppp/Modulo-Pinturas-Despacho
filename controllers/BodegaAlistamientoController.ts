@@ -25,11 +25,11 @@ const getBodegaById = async (req: Request, res: Response) => {
 };
 
 const createBodega = async (req: Request, res: Response) => {
-  const { referencia, nombre_producto, color, estado, fecha_pintura, acciones } = req.body;
+  const { referencia, nombre_producto, color, estado, fecha_pintura } = req.body;
   try {
     const [result] = await promisePool.query(
-      'INSERT INTO BODEGA_ALISTAMIENTO (referencia, nombre_producto, color, estado, fecha_pintura, acciones) VALUES (?, ?, ?, ?, ?, ?)',
-      [referencia, nombre_producto, color, estado, fecha_pintura, acciones]
+      'INSERT INTO BODEGA_ALISTAMIENTO (referencia, nombre_producto, color, estado, fecha_pintura) VALUES (?, ?, ?, ?, ?)',
+      [referencia, nombre_producto, color, estado, fecha_pintura]
     );
     res.status(201).json({ message: 'Registro creado', id: (result as any).insertId });
   } catch (error) {
@@ -39,11 +39,11 @@ const createBodega = async (req: Request, res: Response) => {
 
 const updateBodega = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { referencia, nombre_producto, color, estado, fecha_pintura, acciones } = req.body;
+  const { referencia, nombre_producto, color, estado, fecha_pintura } = req.body;
   try {
     const [result] = await promisePool.query(
-      'UPDATE BODEGA_ALISTAMIENTO SET referencia = ?, nombre_producto = ?, color = ?, estado = ?, fecha_pintura = ?, acciones = ? WHERE id_bodega_alistamiento = ?',
-      [referencia, nombre_producto, color, estado, fecha_pintura, acciones, id]
+      'UPDATE BODEGA_ALISTAMIENTO SET referencia = ?, nombre_producto = ?, color = ?, estado = ?, fecha_pintura = ? WHERE id_bodega_alistamiento = ?',
+      [referencia, nombre_producto, color, estado, fecha_pintura, id]
     );
     res.json({ message: 'Registro actualizado' });
   } catch (error) {
