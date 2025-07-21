@@ -1,18 +1,12 @@
 import { Router } from 'express';
-import {
-  getAllBodegaPintura,
-  getBodegaPinturaById,
-  createBodegaPintura,
-  updateBodegaPintura,
-  deleteBodegaPintura
-} from '../controllers/BodegaPinturaController';
+import bodegaPinturaController from '../controllers/BodegaPinturaController';
 
 const router = Router();
 
-router.get('/listar', getAllBodegaPintura);
-router.get('/detalle/:id', getBodegaPinturaById);
-router.post('/crear', createBodegaPintura);
-router.put('/actualizar/:id', updateBodegaPintura);
-router.delete('/eliminar/:id', deleteBodegaPintura);
+router.get('/listar', bodegaPinturaController.getAllBodegaPintura);
+router.get('/detalle/:id', bodegaPinturaController.getBodegaPinturaById);
+router.post('/crear', bodegaPinturaController.createBodegaPintura);
+router.put('/actualizar/:id', bodegaPinturaController.updateBodegaPintura);
+router.delete('/eliminar/:id', bodegaPinturaController.deleteBodegaPintura);
 
 export default router;
