@@ -8,6 +8,8 @@ import ProductoRoutes from "./routes/ProductoRoutes";
 import bodegaPinturaRoutes from './routes/BodegaPinturaRoutes';
 import despachoRoutes from './routes/DespachoRoutes';
 import bodegaRoutes from './routes/BodegaAlistamientoRoutes';
+import clienteRoutes from './routes/ClienteRoutes';
+import rutaRoutes from './routes/RutaRoutes';
 
 
 dotenv.config();
@@ -43,6 +45,8 @@ app.use('/producto', ProductoRoutes);
 app.use('/bodega-pintura', bodegaPinturaRoutes);
 app.use('/despachos', despachoRoutes);
 app.use('/bodega-alistamiento', bodegaRoutes);
+app.use('/clientes', clienteRoutes);
+app.use('/rutas', rutaRoutes);
 
 // ❌ Manejo global de errores
 app.use((err: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
