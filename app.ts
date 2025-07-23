@@ -16,6 +16,7 @@ import auxiliarRoutes from './routes/AuxiliarRoutes'
 import conductorRoutes from "./routes/ConductorRoutes"
 import ruta_DestinoRoutes from "./routes/Ruta_DestinoRoutes"
 import pedidoRoutes from "./routes/PedidoRoutes"
+import liderAreaRoutes from "./routes/LiderAreaRoutes"
 
 dotenv.config()
 
@@ -60,6 +61,7 @@ app.use("/auxiliares", auxiliarRoutes)
 app.use("/conductor", conductorRoutes)
 app.use("/ruta_destino", ruta_DestinoRoutes)
 app.use("/pedido", pedidoRoutes)
+app.use("/liderArea", liderAreaRoutes)
 
 // ❌ Manejo global de errores
 app.use((err: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
