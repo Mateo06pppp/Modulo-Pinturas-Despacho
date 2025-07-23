@@ -11,4 +11,6 @@ export interface Despacho {
   id_ruta: number;
   id_cliente: number;
   id_pedido: number;
+  id_conductor: number;
+  id_auxiliar: number;
 }

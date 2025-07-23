@@ -1,37 +1,74 @@
-import { Request, Response } from 'express';
-import promisePool from "../config/config-db";
+import { Request, Response } from "express";
+import * as DespachoService from "../services/DespachoService";
+import * as RutaService from "../services/RutaService";
 
-const getAllDespachos = async (_req: Request, res: Response) => {
-  const [rows] = await promisePool.query('SELECT * FROM DESPACHO');
-  res.json(rows);
+const crear = async (req: Request, res: Response) => {
+  try {
+    const {
+      ruta,
+      destino,
+      id_conductor,
+      id_auxiliar,
+      ...datosDespacho
+    } = req.body;
+
+    const id_ruta = await RutaService.crearRutaSiNoExiste(
+      id_conductor,
+      id_auxiliar,
+      ruta,
+      destino
+    );
+
+    const despacho = { ...datosDespacho, id_ruta, id_conductor: id_conductor ?? null, id_auxiliar: id_auxiliar ?? null };
+    const id_despacho = await DespachoService.crearDespacho(despacho);
+    res.status(201).json({ message: "Despacho creado", id_despacho });
+  } catch (err) {
+    if (err instanceof Error) {
+      res.status(500).json({ message: "Error al crear despacho", error: err.message });
+    } else {
+      res.status(500).json({ message: "Error desconocido al crear despacho" });
+    }
+  }
 };
 
-const getDespachoById = async (req: Request, res: Response) => {
-  const [rows]: any = await promisePool.query('SELECT * FROM DESPACHO WHERE id_despacho = ?', [req.params.id]);
-  if (rows.length === 0) return res.status(404).json({ message: 'Despacho no encontrado' });
-  res.json(rows[0]);
+const listar = async (req: Request, res: Response) => {
+  const result = await DespachoService.listarDespachos();
+  res.status(200).json(result);
 };
 
-const createDespacho = async (req: Request, res: Response) => {
-  const nuevo: any = req.body;
-  const [result]: any = await promisePool.query('INSERT INTO DESPACHO SET ?', [nuevo]);
-  res.json({ id: result.insertId, ...nuevo });
+const obtener = async (req: Request, res: Response) => {
+  const result = await DespachoService.obtenerDespacho(Number(req.params.id));
+  res.status(200).json(result);
 };
 
-const updateDespacho = async (req: Request, res: Response) => {
-  await promisePool.query('UPDATE DESPACHO SET ? WHERE id_despacho = ?', [req.body, req.params.id]);
-  res.json({ message: 'Despacho actualizado' });
+const actualizar = async (req: Request, res: Response) => {
+  try {
+    const {
+      ruta,
+      destino,
+      id_conductor,
+      id_auxiliar,
+      ...datosDespacho
+    } = req.body;
+
+    const id_ruta = await RutaService.crearRutaSiNoExiste(
+      id_conductor,
+      id_auxiliar,
+      ruta,
+      destino
+    );
+
+    const despacho = { ...datosDespacho, id_ruta, id_conductor: id_conductor ?? null, id_auxiliar: id_auxiliar ?? null };
+    const result = await DespachoService.actualizarDespacho(Number(req.params.id), despacho);
+    res.status(200).json({ message: "Despacho actualizado", result });
+  } catch (err) {
+    res.status(500).json({ message: "Error al actualizar", error: (err as Error).message });
+  }
 };
 
-const deleteDespacho = async (req: Request, res: Response) => {
-  await promisePool.query('DELETE FROM DESPACHO WHERE id_despacho = ?', [req.params.id]);
-  res.json({ message: 'Despacho eliminado' });
+const eliminar = async (req: Request, res: Response) => {
+  const result = await DespachoService.eliminarDespacho(Number(req.params.id));
+  res.status(200).json({ message: "Despacho eliminado", result });
 };
 
-export default {
-    getAllDespachos,
-    getDespachoById,
-    createDespacho,
-    updateDespacho,
-    deleteDespacho
-}
+export default { crear, listar, obtener, actualizar, eliminar };
