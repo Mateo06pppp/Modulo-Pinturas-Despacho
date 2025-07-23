@@ -5,9 +5,9 @@ import promisePool from "../config/config-db";
 
 const registro = async (req: Request, res: Response) => {
     try {
-        const { nombre, password_hash, estado, id_rol } = req.body;
+        const { nombre, password_hash, estado, id_lider } = req.body;
 
-        console.log("📩 Datos recibidos:", { nombre, password_hash, estado, id_rol });
+        console.log("📩 Datos recibidos:", { nombre, password_hash, estado, id_lider });
 
         // 1. 🔍 Verificar si el nombre ya está registrado ANTES de intentar insertarlo
         const [existeNombre]: any = await promisePool.execute(
@@ -25,10 +25,10 @@ const registro = async (req: Request, res: Response) => {
 
         // 2. ✅ Si no existe, proceder a registrar
         console.log(`✅ Registrando usuario...`);
-        const user = new User(nombre, password_hash, estado, id_rol);
+        const user = new User(nombre, password_hash, estado, id_lider);
         await usuarioService.registro(user);
 
-        console.log(`✅ Usuario registrado exitosamente - Nombre: ${nombre}, Rol: ${id_rol}`);
+        console.log(`✅ Usuario registrado exitosamente - Nombre: ${nombre}, Rol: ${id_lider}`);
         return res.status(201).json({
             status: "success",
             message: "Usuario registrado exitosamente.",

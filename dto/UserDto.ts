@@ -2,19 +2,19 @@ class User {
     private _nombre: string;
     private _password_hash: string;
     private _estado: string;
-    private _id_rol: number;
+    private _id_lider: number;
 
 
     constructor (
         nombre: string,
         password_hash: string,
         estado: string,
-        id_rol: number
+        id_lider: number
     ){
         this._nombre = nombre;
         this._password_hash = password_hash;
         this._estado = estado;
-        this._id_rol = id_rol
+        this._id_lider = id_lider
     }
 
 
@@ -31,8 +31,8 @@ class User {
       return this._estado;
     }
 
-    get id_rol(): number {
-      return this._id_rol;
+    get id_lider(): number {
+      return this._id_lider;
     }
 
 
@@ -49,8 +49,8 @@ class User {
         this._estado = estado;
     }
 
-    set id_rol(id_rol: number) {
-        this._id_rol = id_rol;
+    set id_lider(id_lider: number) {
+        this._id_lider = id_lider;
     }
 }
 

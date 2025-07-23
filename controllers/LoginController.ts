@@ -11,7 +11,7 @@ interface LoginResponse {
   status: string;
   id?: number;
   nombre?: string;
-  id_rol?: number;
+  id_lider?: number;
 }
 
 const login = async (req: Request, res: Response) => {
@@ -31,11 +31,11 @@ const login = async (req: Request, res: Response) => {
 
         if (loginResult.logged === true) {
             // ✅ LOGIN EXITOSO
-            if (!loginResult.id || !loginResult.nombre || loginResult.id_rol === undefined) {
+            if (!loginResult.id || !loginResult.nombre || loginResult.id_lider === undefined) {
                 console.error("❌ DATOS FALTANTES EN EL RESULTADO:", {
                 id: loginResult.id,
                 name_person: loginResult.nombre,
-                role_id: loginResult.id_rol
+                id_lider: loginResult.id_lider
                 });
                 return res.status(500).json({ 
                 status: "error",
@@ -46,7 +46,7 @@ const login = async (req: Request, res: Response) => {
             const userData = {
                 id: loginResult.id,
                 nombre: loginResult.nombre,
-                id_rol: loginResult.id_rol
+                id_lider: loginResult.id_lider
             };
 
             console.log("✅ Login exitoso para:", userData.nombre);
@@ -56,7 +56,7 @@ const login = async (req: Request, res: Response) => {
                 token: generateToken({
                 id: userData.id,
                 nombre: userData.nombre,
-                id_rol: userData.id_rol
+                id_lider: userData.id_lider
                 }, 5),
                 user: userData,
             });
