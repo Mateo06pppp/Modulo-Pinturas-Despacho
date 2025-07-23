@@ -15,7 +15,7 @@ import reportesRoutes from "./routes/ReportesRoutes"
 import auxiliarRoutes from './routes/AuxiliarRoutes'
 import conductorRoutes from "./routes/ConductorRoutes"
 import ruta_DestinoRoutes from "./routes/Ruta_DestinoRoutes"
-import detallePedidoRoutes from "./routes/DetallePedidoRoutes"
+import pedidoRoutes from "./routes/PedidoRoutes"
 
 dotenv.config()
 
@@ -59,7 +59,7 @@ app.use("/reportes", reportesRoutes)
 app.use("/auxiliares", auxiliarRoutes)
 app.use("/conductor", conductorRoutes)
 app.use("/ruta_destino", ruta_DestinoRoutes)
-app.use("/detallePedido", detallePedidoRoutes)
+app.use("/pedido", pedidoRoutes)
 
 // ❌ Manejo global de errores
 app.use((err: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {

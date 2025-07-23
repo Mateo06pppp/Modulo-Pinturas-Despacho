@@ -12,7 +12,7 @@ class UserRepository{
             USUARIO.nombre,  
             USUARIO.password_hash,    
             USUARIO.estado,
-            USUARIO.id_rol
+            USUARIO.id_lider
         ];
         return db.execute(sql, values);
     }
@@ -44,7 +44,7 @@ class UserRepository{
       status: "success",
       id: user.id_usuario,
       nombre: user.nombre,
-      id_rol: user.id_rol,
+      id_lider: user.id_lider,
     };
   }
 }
