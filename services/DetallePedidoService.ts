@@ -10,6 +10,7 @@ export const crearDetallePedido = async (detalle: DetallePedido) => {
 export const obtenerDetallesPorPedido = async (id_pedido: number) => {
   const query = 'SELECT * FROM detalle_pedido WHERE id_pedido = ?';
   const [rows] = await promisePool.execute(query, [id_pedido]);
+  console.log("Resultado obtenido:", rows);
   return rows;
 };
 
