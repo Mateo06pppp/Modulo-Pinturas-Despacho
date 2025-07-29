@@ -1,23 +1,34 @@
 import { Request, Response } from 'express';
 import ProductoService from '../services/ProductoService';
 
-const listarProductos = async (_req: Request, res: Response) => {
-  try {
-    const productos = await ProductoService.listar();
-    return res.status(200).json({
-      status: 'success',
-      data: productos,
-    });
-  } catch (error: any) {
-    console.error('❌ Error al obtener productos:', error);
-    return res.status(500).json({
-      status: 'error',
-      message: 'Error en el servidor',
-      details: error.message,
-    });
+class ProductoController {
+  async getAll(req: Request, res: Response) {
+    const productos = await ProductoService.getAll();
+    res.json(productos);
   }
-};
 
-export default {
-  listarProductos
-};
+  async create(req: Request, res: Response) {
+    const nuevo = await ProductoService.create(req.body);
+    res.status(201).json(nuevo);
+  }
+
+  async update(req: Request, res: Response) {
+    const id = parseInt(req.params.id);
+    const actualizado = await ProductoService.update(id, req.body);
+    res.json(actualizado);
+  }
+
+  async delete(req: Request, res: Response) {
+    const id = parseInt(req.params.id);
+    await ProductoService.delete(id);
+    res.status(204).send();
+  }
+
+  async getById(req: Request, res: Response) {
+    const id = parseInt(req.params.id);
+    const producto = await ProductoService.getById(id);
+    res.json(producto);
+  }
+}
+
+export default new ProductoController();
