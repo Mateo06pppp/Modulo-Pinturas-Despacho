@@ -1,14 +1,15 @@
-class ProductoDto {
-  constructor(
-    public referencia: string,
-    public nombre: string,
-    public color: string,
-    public cantidad_actual: number,
-    public estado_producto: string,
-    public fecha_recepcion: string,
-    public ubicacion_bodega: string,
-    public id_linea_produccion: number
-  ) {}
+export default interface ProductoDTO {
+  referencia: string;
+  nombre: string;
+  color: string;
+  cantidad_actual: number;
+  estado_producto: string;
+  fecha_recepcion: string;
+  ubicacion_bodega: string;
+  id_linea_produccion: number;
+  id_familia: number;
+  id_linea: number;
+  id_modelo: number;
+  id_planta: number;
+  id_tiempo: number;
 }
-
-export default ProductoDto;
