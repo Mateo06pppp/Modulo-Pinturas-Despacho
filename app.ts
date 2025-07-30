@@ -19,6 +19,7 @@ import pedidoRoutes from "./routes/PedidoRoutes"
 import liderAreaRoutes from "./routes/LiderAreaRoutes"
 import planSemanalRoutes from "./routes/PlanSemanalRoutes";
 import planMaestroRoutes from "./routes/PlanMaestroRoutes";
+import planColorRoutes from "./routes/PlanColorRoutes";
 
 dotenv.config()
 
@@ -66,6 +67,7 @@ app.use("/pedido", pedidoRoutes)
 app.use("/liderArea", liderAreaRoutes)
 app.use("/plan-semanal", planSemanalRoutes)
 app.use("/plan-maestro", planMaestroRoutes)
+app.use("/plan-color", planColorRoutes)
 
 
 // ❌ Manejo global de errores
