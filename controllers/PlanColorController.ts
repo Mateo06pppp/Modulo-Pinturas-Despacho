@@ -18,15 +18,24 @@ class PlanColorController {
     res.json(colores);
   }
 
-  async create(req: Request, res: Response) {
-    const nuevo = await PlanColorService.create(req.body);
-    res.status(201).json(nuevo);
+  async createOrUpdate(req: Request, res: Response) {
+    try {
+      const result = await PlanColorService.createOrUpdateColor(req.body);
+      res.json(result);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
   }
 
   async update(req: Request, res: Response) {
-    const actualizado = await PlanColorService.update(parseInt(req.params.id), req.body);
-    res.json(actualizado);
+    try {
+      const actualizado = await PlanColorService.update(parseInt(req.params.id), req.body);
+      res.json(actualizado);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
   }
+
 
   async delete(req: Request, res: Response) {
     await PlanColorService.delete(parseInt(req.params.id));
