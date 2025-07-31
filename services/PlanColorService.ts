@@ -125,27 +125,76 @@ class PlanColorService {
   }
 
 
-  async update(id: number, data: PlanColorDTO) {
-    const { tipo_plan, id_plan, color, cantidad } = data;
+  async update(id: number, dto: PlanColorDTO): Promise<void> {
+  const [existingRows]: any = await db.query('SELECT * FROM plan_color WHERE id = ?', [id]);
+  const existing = existingRows[0];
+  if (!existing) throw new Error('Color no encontrado');
 
-    // Verificar si otro color igual ya existe en ese plan
-    const [existeDuplicado] = await db.query(`
-      SELECT * FROM plan_color 
-      WHERE tipo_plan = ? AND id_plan = ? AND color = ? AND id <> ?
-    `, [tipo_plan, id_plan, color, id]);
+  const [duplicadoRows]: any = await db.query(
+    'SELECT * FROM plan_color WHERE tipo_plan = ? AND id_plan = ? AND color = ? AND id != ?',
+    [existing.tipo_plan, existing.id_plan, dto.color, id]
+  );
+  if (duplicadoRows.length > 0) throw new Error('Ya existe este color para este plan');
 
-    if ((existeDuplicado as any[]).length > 0) {
-      throw new Error(`Ya existe un color '${color}' para este plan.`);
+  const [coloresRows]: any = await db.query(
+    'SELECT * FROM plan_color WHERE tipo_plan = ? AND id_plan = ?',
+    [existing.tipo_plan, existing.id_plan]
+  );
+
+  const sumaSinActual = coloresRows.reduce((sum: number, c: any) => sum + (c.id === id ? 0 : Number(c.cantidad)), 0);
+  const nuevaSuma = sumaSinActual + Number(dto.cantidad);
+
+  const tablaPlan = existing.tipo_plan === 'semanal' ? 'plan_semanal' : 'plan_maestro';
+  const idCampo = existing.tipo_plan === 'semanal' ? 'id_plan_semanal' : 'id_plan_maestro';
+
+  const [planRows]: any = await db.query(`SELECT * FROM ${tablaPlan} WHERE ${idCampo} = ?`, [existing.id_plan]);
+  const plan = planRows[0];
+  const objetivo = Number(plan?.cantidad_objetivo);
+
+  if (nuevaSuma > objetivo) {
+    throw new Error(`Suma de colores (${nuevaSuma}) supera el objetivo (${objetivo})`);
+  }
+
+  await db.query(
+    'UPDATE plan_color SET tipo_plan = ?, id_plan = ?, color = ?, cantidad = ? WHERE id = ?',
+    [dto.tipo_plan, dto.id_plan, dto.color, dto.cantidad, id]
+  );
+
+  await db.query(
+    `UPDATE ${tablaPlan} SET cantidad_produccion = ? WHERE ${idCampo} = ?`,
+    [nuevaSuma, existing.id_plan]
+  );
+
+  // Validación mensual si es semanal
+  if (existing.tipo_plan === 'semanal') {
+    const [semanalRows]: any = await db.query('SELECT * FROM plan_semanal WHERE id_plan_semanal = ?', [existing.id_plan]);
+    const semanal = semanalRows[0];
+
+    const [produccionesRows]: any = await db.query(
+      'SELECT * FROM plan_semanal WHERE semana = ? AND id_producto = ?',
+      [semanal.semana, semanal.id_producto]
+    );
+
+    const totalProduccion = produccionesRows.reduce((sum: number, p: any) => sum + Number(p.cantidad_produccion), 0);
+
+    const mes = semanal.semana.split(' ')[2];
+    const [maestroRows]: any = await db.query(
+      'SELECT * FROM plan_maestro WHERE mes = ? AND id_producto = ?',
+      [mes, semanal.id_producto]
+    );
+    const maestro = maestroRows[0];
+
+    if (totalProduccion > Number(maestro?.cantidad_objetivo)) {
+      throw new Error(`La producción mensual (${totalProduccion}) supera el objetivo mensual (${maestro?.cantidad_objetivo})`);
     }
 
-    await db.query(`
-      UPDATE plan_color
-      SET tipo_plan = ?, id_plan = ?, color = ?, cantidad = ?
-      WHERE id = ?
-    `, [tipo_plan, id_plan, color, cantidad, id]);
-
-    return { message: "Color actualizado correctamente", id };
+    await db.query(
+      'UPDATE plan_maestro SET cantidad_produccion = ? WHERE id_plan_maestro = ?',
+      [totalProduccion, maestro.id_plan_maestro]
+    );
   }
+ }
+
 
   async delete(id: number) {
     await db.query(`DELETE FROM plan_color WHERE id = ?`, [id]);
